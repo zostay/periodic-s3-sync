@@ -1,0 +1,31 @@
+FROM alpine:3.3
+
+RUN apk --no-cache add \
+        py-pip \
+        python \
+    && pip install --upgrade \
+        pip \
+        awscli
+
+ENV ROLE_ARN= \
+    SYNC_FROM= \
+    SYNC_TO= \
+    CRON_SCHEDULE="0 1 * * *" \
+    SYNC_MODE="STARTUP+PERIODIC" \
+    SYNC_PARAMS= \
+    AWS_ACCESS_KEY_ID= \
+    AWS_SECRET_ACCESS_KEY= \
+    AWS_SESSION_TOKEN= \
+    AWS_DEFAULT_REGION= \
+    AWS_DEFAULT_OUTPUT= \
+    AWS_PROFILE= \
+    AWS_CA_BUNDLE= \
+    AWS_SHARED_CREDENTIALS_FILE= \
+    AWS_CONFIG_FILE=
+
+VOLUME /data
+
+COPY s3-sync.sh /s3-sync.sh
+COPY entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]
