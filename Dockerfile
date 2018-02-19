@@ -3,6 +3,7 @@ FROM alpine:3.3
 RUN apk --no-cache add \
         py-pip \
         python \
+        jq \
     && pip install --upgrade \
         pip \
         awscli
@@ -13,6 +14,7 @@ ENV ROLE_ARN= \
     CRON_SCHEDULE="0 1 * * *" \
     SYNC_MODE="STARTUP+PERIODIC" \
     SYNC_PARAMS= \
+    DEBUG_SESSION_INFO= \
     AWS_ACCESS_KEY_ID= \
     AWS_SECRET_ACCESS_KEY= \
     AWS_SESSION_TOKEN= \
