@@ -1,8 +1,8 @@
 # Periodic S3 Sync
 
 This docker image is intended to do just one thing: copy files between S3 and
-somewhere else, either once or on a schedule. This is configured using an IAM
-role rather than an explicit AWS key. The reasons for this are listed below.
+somewhere, either once or on a schedule. This is configured using an IAM role
+rather than an explicit AWS key. The reasons for this are listed below.
 
 ## Configuration
 
@@ -39,7 +39,9 @@ You can authenticate directly using an access key/secret key pair.
   means, you do not need to know what this parameter is.
 
 This is the most straightforward authentication method. This is useful when you
-are not running this container away from AWS.
+are running this container away from AWS. However, using key pairs for
+authentication is not a recommended practice, in general. There are some notes
+below explaining why.
 
 ## IAM Role Authentication
 
@@ -54,6 +56,11 @@ explicitly named key pair. This can be done in the following ways:
 * `ROLE_ARN` - You may name the ARN of a role you want the sync container to
   take on explicitly. The container will assume this role if it is able to do
   so.
+
+If you are having trouble getting an explicit role to work, a `SESSION_DEBUG`
+option is added. If you set this to 1, it will display the output of the login
+sequence, which can be sure the role switch is working correctly from the
+container.
 
 ## Additional Configuration
 
