@@ -17,7 +17,7 @@ The options are passed in via environment variables like so:
 * `SYNC_TO` - (Required) This is the name of the location to send files to. This
   may be either a local path or an S3 URI.
 * `CRON_SCHEDULE` - This is the schedule to run with. If not given, it is
-  assumed to be "0 1 * * *", so the period is once every hour.
+  assumed to be "0 * * * *", so the period is once every hour.
 * `SYNC_MODE` - This may be set to `PERIODIC` or `STARTUP` or
   `STARTUP+PERIODIC`. If the mode is `PERIODIC` or `STARTUP+PERIODIC`, the
   copying is performed according to the `CRON_SCHEDULE`. If the mode is either

@@ -11,7 +11,7 @@ RUN apk --no-cache add \
 ENV ROLE_ARN= \
     SYNC_FROM= \
     SYNC_TO= \
-    CRON_SCHEDULE="0 1 * * *" \
+    CRON_SCHEDULE="0 * * * *" \
     SYNC_MODE="STARTUP+PERIODIC" \
     SYNC_PARAMS= \
     DEBUG_SESSION_INFO= \
