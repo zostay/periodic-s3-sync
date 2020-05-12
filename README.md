@@ -181,5 +181,6 @@ while learning about these issues:
 * For ECS, you can perform the special cluster configuration described in [IAM
   Roles for Tasks](https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html).
 
-* For Kubernetes, you can look into configuring 
+* For Kubernetes, you can look into configuring
+    [kaim](https://github.com/uswitch/kiam) or
   [kube2iam](https://github.com/jtblin/kube2iam).
