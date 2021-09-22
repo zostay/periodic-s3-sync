@@ -1,16 +1,19 @@
 FROM alpine:latest
 
 RUN apk --no-cache add \
-        py-pip \
-        python \
+        python3 \
         jq \
-    && pip install --upgrade \
+        ca-certificates \
+    && pip3 install --upgrade \
         pip \
         awscli
+
+RUN aws --version
 
 ENV ROLE_ARN= \
     SYNC_FROM= \
     SYNC_TO= \
+    AWS_CA_BUNDLE="/etc/ssl/cert.pem" \
     CRON_SCHEDULE="0 * * * *" \
     SYNC_MODE="STARTUP+PERIODIC" \
     SYNC_PARAMS= \
@@ -21,7 +24,6 @@ ENV ROLE_ARN= \
     AWS_DEFAULT_REGION= \
     AWS_DEFAULT_OUTPUT= \
     AWS_PROFILE= \
-    AWS_CA_BUNDLE= \
     AWS_SHARED_CREDENTIALS_FILE= \
     AWS_CONFIG_FILE=
 
