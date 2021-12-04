@@ -5,10 +5,7 @@ import sys
 
 ddb = boto3.client('dynamodb')
 
-build = sys.argv[1]
-build_parts = build.split(':')
-project_parts = build_parts[:-1]
-project = ':'.join(project_parts)
+project = sys.argv[1]
 
 values = ddb.update_item(
     TableName        = 'BuildCounter',
