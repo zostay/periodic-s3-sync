@@ -24,8 +24,6 @@ jobs:
         registry: public.ecr.aws
         username: ${{ secrets.AWS_ACCESS_KEY_ID }}
         password: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      env:
-        AWS_REGION: us-east-2
     - uses: actions/checkout@v2
     - name: Install boto3
       run: pip install boto3
