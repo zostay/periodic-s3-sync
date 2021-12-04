@@ -34,7 +34,7 @@ jobs:
     - name: Update Build Number
       env:
         BUILD_COUNTER: github.com/zostay/periodic-s3-sync@${{ env.BUILD_PREFIX }}
-      run: "echo BUILD_TAG=$BUILD_PREFIX-$(python bin/build-number.py $BUILD_COUNTER) >> $GITHUB_ENV"
+      run: "echo BUILD_TAG=$BUILD_PREFIX-$(python build-number.py $BUILD_COUNTER) >> $GITHUB_ENV"
     - run: "echo Build $BUILD_TAG"
     - uses: docker/build-push-action@v2
       with:
