@@ -2,7 +2,7 @@
 
 set -e
 
-if [[ "$ROLE_ARN" -a -z "$AWS_ACCESS_KEY_ID" ]]; then
+if [[ "$ROLE_ARN" && -z "$AWS_ACCESS_KEY_ID" ]]; then
     echo "Operating as $ROLE_ARN"
     if [[ "$CONFIG_METHOD" == "metadata" ]]; then
         echo "Assuming role via metadata"
