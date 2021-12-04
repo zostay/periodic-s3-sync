@@ -2,6 +2,7 @@ FROM alpine:latest
 
 RUN apk --no-cache add \
         python3 \
+        py3-pip3 \
         jq \
         ca-certificates \
     && pip3 install --upgrade \
