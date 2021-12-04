@@ -1,8 +1,8 @@
 ---
 name: Build/Deploy
 env:
-  IMAGE_REPO_NAME: d3q2d7b9/periodic-s3-sync
-  DOCKER_REGISTRY: public.ecr.aws
+  IMAGE_REPO_NAME: periodic-s3-sync
+  DOCKER_REGISTRY: public.ecr.aws/d3q2d7b9
 on:
   push:
     branches: [ master, prod ]
@@ -40,4 +40,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_REPO_NAME }}:latest,${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_REPO_NAME }}:${{ env.BUILD_TAG }}
+        tags: ${{ env.IMAGE_REPO_NAME }}:latest,${{ env.IMAGE_REPO_NAME }}:${{ env.BUILD_TAG }}
