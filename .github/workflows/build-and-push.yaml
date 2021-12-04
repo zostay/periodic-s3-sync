@@ -1,7 +1,7 @@
 ---
 name: Build/Deploy
 env:
-  IMAGE_REPO_NAME: public.ecr.aws/d3q2d7b9/periodic-s3-sync
+  IMAGE_REPO_NAME: periodic-s3-sync
 on:
   push:
     branches: [ master, prod ]
