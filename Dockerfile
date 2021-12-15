@@ -11,22 +11,11 @@ RUN apk --no-cache add \
 
 RUN aws --version
 
-ENV ROLE_ARN= \
-    SYNC_FROM= \
-    SYNC_TO= \
-    AWS_CA_BUNDLE="/etc/ssl/cert.pem" \
+ENV AWS_CA_BUNDLE="/etc/ssl/cert.pem" \
     CRON_SCHEDULE="0 * * * *" \
     SYNC_MODE="STARTUP+PERIODIC" \
-    SYNC_PARAMS= \
-    DEBUG_SESSION_INFO= \
-    AWS_ACCESS_KEY_ID= \
-    AWS_SECRET_ACCESS_KEY= \
-    AWS_SESSION_TOKEN= \
-    AWS_DEFAULT_REGION= \
-    AWS_DEFAULT_OUTPUT= \
-    AWS_PROFILE= \
-    AWS_SHARED_CREDENTIALS_FILE= \
-    AWS_CONFIG_FILE=
+    SYNC_FROM="/data" \
+    SYNC_TO="/data"
 
 VOLUME /data
 
