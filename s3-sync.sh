@@ -10,10 +10,12 @@ aws s3 sync $SYNC_FROM $SYNC_TO $SYNC_PARAMS
 # only do this during the startup sync.
 if [[ -n "$__STARTUP_SYNC_IN_PROGRESS" && -n "$COMPLETION_FILENAME" ]]; then
     if [[ "$SYNC_TO" != "s3:"* ]]; then
-        touch $SYNC_TO/
+        echo "TOUCH $SYNC_TO/$COMPLETION_FILE"
+        touch "$SYNC_TO/$COMPLETION_FILE"
     fi
     if [[ "$SYNC_FROM" != "s3:"* ]]; then
-        touch $SYNC_FROM/
+        echo "TOUCH $SYNC_FROM/$COMPLETION_FILE"
+        touch "$SYNC_FROM/$COMPLETION_FILE"
     fi
 fi
 
