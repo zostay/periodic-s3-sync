@@ -1,13 +1,11 @@
-FROM alpine:latest
+FROM alpine:3.19.1
 
 RUN apk --no-cache add \
         python3 \
         py3-pip \
         jq \
         ca-certificates \
-    && pip3 install --upgrade \
-        pip \
-        awscli
+        aws-cli
 
 RUN aws --version
 
