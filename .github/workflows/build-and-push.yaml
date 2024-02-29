@@ -1,8 +1,8 @@
 ---
 name: Build/Deploy
 env:
+  REGISTRY_NAME: qubling
   IMAGE_REPO_NAME: periodic-s3-sync
-  DOCKER_REGISTRY: public.ecr.aws/qubling
 on:
   push:
     branches: [ master, prod ]
@@ -39,4 +39,4 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{steps.login-ecr-public.outputs.registry}}/${{ env.IMAGE_REPO_NAME }}:latest,${{steps.login-ecr-public.outputs.registry}}/${{ env.IMAGE_REPO_NAME }}:${{ env.BUILD_TAG }}
+        tags: ${{steps.login-ecr-public.outputs.registry}}/${{ env.REGISTRY_NAME }}/${{ env.IMAGE_REPO_NAME }}:latest,${{steps.login-ecr-public.outputs.registry}}/${{ env.REGISTRY_NAME }}/${{ env.IMAGE_REPO_NAME }}:${{ env.BUILD_TAG }}
