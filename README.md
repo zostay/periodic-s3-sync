@@ -27,6 +27,10 @@ The options are passed in via environment variables like so:
   is `STARTUP+PERIODIC`.
 * `SYNC_PARAMS` - Any additional parameters you want to pass to the AWS CLI S3
   sync command.
+* `CHMOD_MODE` - If set and `SYNC_TO` is a local path, this will be passed as
+  the mode to set on all files and directories recursively after sync.
+* `CHOWN_OWNER` - If set and `SYNC_TO` is a local path, this user will be given
+  ownership of all the files after sync is complete.
 
 ## IAM Key Pair Authentication
 

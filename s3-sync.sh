@@ -6,6 +6,16 @@ echo "$(date) - Start Sync $SYNC_FROM -> $SYNC_TO"
 
 aws s3 sync $SYNC_FROM $SYNC_TO $SYNC_PARAMS
 
+if [[ -n "$CHOWN_OWNER" ]] && [[ "$SYNC_TO" != "s3:"* ]]; then
+    echo CHOWN $CHOWN_OWNER
+    chown -R "$CHOWN_OWNER" "$SYNC_TO"
+fi
+
+if [[ -n "$CHMOD_MODE" ]] && [[ "$SYNC_TO" != "s3:"* ]]; then
+    echo CHMOD $CHMOD_MODE
+    chmod -R "$CHMOD_MODE" "$SYNC_TO"
+fi
+
 # touch the completion file somewhere locally if requested on completion, but
 # only do this during the startup sync.
 if [[ "$__STARTUP_SYNC_IN_PROGRESS" && "$COMPLETION_FILENAME" ]]; then
