@@ -1,7 +1,7 @@
 ---
 name: Build/Deploy
 env:
-  REGISTRY_NAME: qubling
+  REGISTRY_NAME: a8o4e7q9
   IMAGE_REPO_NAME: periodic-s3-sync
 on:
   push:
