@@ -4,6 +4,7 @@ This docker image is intended to do just one thing: copy files between S3 and
 somewhere, either once or on a schedule. This is configured using an IAM role
 rather than an explicit AWS key. The reasons for this are listed below.
 
+
 ## Configuration
 
 To startup the container quickly, just run:
