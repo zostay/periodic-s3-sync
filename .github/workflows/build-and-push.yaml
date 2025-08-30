@@ -17,6 +17,8 @@ jobs:
     - uses: actions/checkout@v4
     - name: Extract Branch Name
       run: "echo $GITHUB_REF | awk -F/ '{{print\"BUILD_PREFIX=\"$3}}' >> $GITHUB_ENV"
+    - name: Repository Name To Lowercase
+      run: echo REPOSITORY="${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
     - name: Build Number
       run: echo BUILD_TAG="${{ env.BUILD_PREFIX }}-${{ github.run_number }}.${{ github.run_attempt }}" >> $GITHUB_ENV
     - uses: docker/build-push-action@v5
