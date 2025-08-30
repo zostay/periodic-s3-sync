@@ -4,7 +4,7 @@ set -e
 
 echo "$(date) - Start Sync $SYNC_FROM -> $SYNC_TO"
 
-aws s3 sync $SYNC_FROM $SYNC_TO $SYNC_PARAMS
+s3cmd sync $SYNC_FROM $SYNC_TO $SYNC_PARAMS
 
 if [[ -n "$CHOWN_OWNER" ]] && [[ "$SYNC_TO" != "s3:"* ]]; then
     echo CHOWN $CHOWN_OWNER

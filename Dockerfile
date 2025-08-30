@@ -5,7 +5,7 @@ RUN apk --no-cache add \
         py3-pip \
         jq \
         ca-certificates \
-        aws-cli
+        s3cmd
 
 RUN aws --version
 
