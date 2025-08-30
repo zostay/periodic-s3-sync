@@ -2,6 +2,16 @@
 
 set -e
 
+echo Parameters:
+echo "  SYNC_FROM: $SYNC_FROM"
+echo "  SYNC_TO: $SYNC_TO"
+echo "  SYNC_PARAMS: $SYNC_PARAMS"
+echo "  CHOWN_OWNER: $CHOWN_OWNER"
+echo "  CHMOD_MODE: $CHMOD_MODE"
+echo "  COMPLETION_FILENAME: $COMPLETION_FILENAME"
+echo "  AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:+set}"
+echo "  AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:+set}"
+
 echo "$(date) - Start Sync $SYNC_FROM -> $SYNC_TO"
 
 s3cmd sync $SYNC_FROM $SYNC_TO $SYNC_PARAMS
