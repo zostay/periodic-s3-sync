@@ -11,32 +11,24 @@ jobs:
   build:
     name: Build and Push to Docker Hub
     runs-on: ubuntu-latest
+    environment: v4.qubling.cloud
     steps:
-    - uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-2
-    - uses: actions/setup-python@v4
     - uses: docker/setup-buildx-action@v3
-    - uses: aws-actions/amazon-ecr-login@v2
-      id: login-ecr-public
-      env:
-        AWS_REGION: us-east-1
-      with:
-        registry-type: public
     - uses: actions/checkout@v4
-    - name: Install boto3
-      run: pip install boto3
     - name: Extract Branch Name
       run: "echo $GITHUB_REF | awk -F/ '{{print\"BUILD_PREFIX=\"$3}}' >> $GITHUB_ENV"
-    - name: Update Build Number
-      env:
-        BUILD_COUNTER: github.com/zostay/periodic-s3-sync@${{ env.BUILD_PREFIX }}
-      run: "echo BUILD_TAG=$BUILD_PREFIX-$(python build-number.py $BUILD_COUNTER) >> $GITHUB_ENV"
-    - run: "echo Build $BUILD_TAG"
+    - name: Build Number
+      run: echo BUILD_TAG="${{ env.BUILD_PREFIX }}-${{ github.run_number }}.${{ github.run_attempt }}" >> $GITHUB_ENV
     - uses: docker/build-push-action@v5
       with:
         context: .
         push: true
-        tags: ${{steps.login-ecr-public.outputs.registry}}/${{ env.REGISTRY_NAME }}/${{ env.IMAGE_REPO_NAME }}:latest,${{steps.login-ecr-public.outputs.registry}}/${{ env.REGISTRY_NAME }}/${{ env.IMAGE_REPO_NAME }}:${{ env.BUILD_TAG }}
+        tags: ghcr.io/${{ env.REPOSITORY }}:latest,ghcr.io/${{ env.REPOSITORY }}:${{ env.BUILD_TAG }}
+    - name: Update Build Number
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.S3_BUILD_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_BUILD_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ vars.S3_BUILD_DEFAULT_REGION }}
+        AWS_ENDPOINT_URL: ${{ vars.S3_BUILD_ENDPOINT_URL }}
+      run: |
+        ./set-build-number --env-name ${{ env.BUILD_PREFIX }} periodic-s3-sync ${{ env.BUILD_TAG }}
