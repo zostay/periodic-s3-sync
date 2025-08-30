@@ -17,7 +17,7 @@ jobs:
     - name: Build Number
       run: echo BUILD_TAG="${{ env.BUILD_PREFIX }}-${{ github.run_number }}.${{ github.run_attempt }}" >> $GITHUB_ENV
     - name: Github Repository?
-      run: echo ${GITHUB_REPOSITORY}
+      run: echo ${{ env.GITHUB_REPOSITORY }}
     - uses: docker/build-push-action@v6
       with:
         context: .
