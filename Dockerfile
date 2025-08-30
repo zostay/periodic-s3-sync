@@ -5,9 +5,9 @@ RUN apk --no-cache add \
         py3-pip \
         jq \
         ca-certificates \
-        aws-cli
+        s3cmd
 
-RUN aws --version
+RUN s3cmd --version
 
 ENV AWS_CA_BUNDLE="/etc/ssl/cert.pem" \
     CRON_SCHEDULE="0 * * * *" \
