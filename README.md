@@ -9,7 +9,7 @@ rather than an explicit AWS key. The reasons for this are listed below.
 
 To startup the container quickly, just run:
 
-    docker run -d [OPTIONS] zostay/periodic-s3-sync
+    docker run -d [OPTIONS] ghcr.io/zostay/periodic-s3-sync
 
 The options are passed in via environment variables like so:
 
@@ -84,7 +84,7 @@ This can be used to pull files from S3 into a local directory:
         -e ROLE_ARN=arn:aws:iam::123456789012:role/sync \
         -e SYNC_FROM=s3://bucket.example.com/path/to/files/ \
         -e SYNC_TO=/data \
-        zostay/periodic-s3-sync
+        ghcr.io/zostay/periodic-s3-sync
 
 Or to push files from a local directory to S3:
 
@@ -92,7 +92,7 @@ Or to push files from a local directory to S3:
         -e ROLE_ARN=arn:aws:iam::123456789012:role/sync \
         -e SYNC_FROM=/data \
         -e SYNC_TO=s3://bucket.example.com/path/to/files/ \
-        zostay/periodic-s3-sync
+        ghcr.io/zostay/periodic-s3-sync
 
 Or to move files around between locations on S3:
 
@@ -100,7 +100,7 @@ Or to move files around between locations on S3:
         -e ROLE_ARN=arn:aws:iam::123456789012:role/sync \
         -e SYNC_FROM=s3://bucket1.example.com/path/to/files/ \
         -e SYNC_TO=s3://bucket2.example.com/path/to/files/ \
-        zostay/periodic-s3-sync
+        ghcr.io/zostay/periodic-s3-sync
 
 When syncing to a local directory, the `/data` directory is the recommended
 location to use.

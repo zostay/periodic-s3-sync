@@ -23,6 +23,7 @@ jobs:
       with:
         context: .
         push: true
+        platforms: linux/amd64,linux/arm64
         tags: ghcr.io/${{ env.REPOSITORY }}:latest,ghcr.io/${{ env.REPOSITORY }}:${{ env.BUILD_TAG }}
     - name: Update Build Number
       env:
