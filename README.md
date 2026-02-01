@@ -1,8 +1,10 @@
 # Periodic S3 Sync
 
-This docker image is intended to do just one thing: copy files between S3 and
-somewhere, either once or on a schedule. This is configured using an IAM role
-rather than an explicit AWS key. The reasons for this are listed below.
+This docker image is intended to do just one thing: copy files between S3 (or
+any S3-compatible object store) and somewhere, either once or on a schedule.
+This supports AWS S3, DigitalOcean Spaces, MinIO, Wasabi, and other
+S3-compatible services. Authentication can be configured using an IAM role or
+an explicit AWS key. The reasons for preferring IAM roles are listed below.
 
 
 ## Configuration
@@ -26,12 +28,16 @@ The options are passed in via environment variables like so:
   container starts. This can be set to an empty value to cause the container to
   do nothing, if you need to disable it and don't want to stop it. The default
   is `STARTUP+PERIODIC`.
-* `SYNC_PARAMS` - Any additional parameters you want to pass to the AWS CLI S3
-  sync command.
+* `SYNC_PARAMS` - Any additional parameters you want to pass to the s3cmd sync
+  command.
 * `CHMOD_MODE` - If set and `SYNC_TO` is a local path, this will be passed as
   the mode to set on all files and directories recursively after sync.
 * `CHOWN_OWNER` - If set and `SYNC_TO` is a local path, this user will be given
   ownership of all the files after sync is complete.
+* `AWS_ENDPOINT_URL` - Custom endpoint URL for non-AWS S3-compatible object
+  stores. Can be specified with or without the protocol (e.g.,
+  `nyc3.digitaloceanspaces.com` or `https://nyc3.digitaloceanspaces.com`). If
+  not set, defaults to AWS S3.
 
 ## IAM Key Pair Authentication
 
@@ -74,9 +80,9 @@ CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.h
 
 ## Examples
 
-The container uses the AWS CLI to run the following command to perform the sync:
+The container uses s3cmd to perform the sync:
 
-    aws s3 sync $SYNC_FROM $SYNC_TO $SYNC_PARAMS
+    s3cmd sync $SYNC_FROM $SYNC_TO $SYNC_PARAMS
 
 This can be used to pull files from S3 into a local directory:
 
@@ -100,6 +106,16 @@ Or to move files around between locations on S3:
         -e ROLE_ARN=arn:aws:iam::123456789012:role/sync \
         -e SYNC_FROM=s3://bucket1.example.com/path/to/files/ \
         -e SYNC_TO=s3://bucket2.example.com/path/to/files/ \
+        ghcr.io/zostay/periodic-s3-sync
+
+To sync from a non-AWS S3-compatible store like DigitalOcean Spaces:
+
+    docker run -d \
+        -e AWS_ACCESS_KEY_ID=your_access_key \
+        -e AWS_SECRET_ACCESS_KEY=your_secret_key \
+        -e AWS_ENDPOINT_URL=nyc3.digitaloceanspaces.com \
+        -e SYNC_FROM=s3://mybucket/path/to/files/ \
+        -e SYNC_TO=/data \
         ghcr.io/zostay/periodic-s3-sync
 
 When syncing to a local directory, the `/data` directory is the recommended
