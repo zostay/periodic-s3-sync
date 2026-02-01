@@ -23,11 +23,10 @@ docker run -d \
 
 ## Architecture
 
-The project consists of three shell scripts:
+The project consists of two shell scripts:
 
 - **entrypoint.sh** - Container entrypoint that parses SYNC_MODE and either runs an immediate sync, sets up cron, or both
 - **s3-sync.sh** - Core sync logic using s3cmd; handles endpoint configuration, chown/chmod, and completion file creation
-- **set-build-number** - Standalone script for CI/CD to store build numbers in S3-compatible object stores (uses curl with S3 V2 signatures, not s3cmd)
 
 ## Key Environment Variables
 
@@ -37,4 +36,4 @@ The project consists of three shell scripts:
 
 ## CI/CD
 
-GitHub Actions workflow builds multi-arch images (amd64/arm64) and pushes to ghcr.io. Build numbers are stored in an S3-compatible object store using the set-build-number script.
+GitHub Actions workflow builds multi-arch images (amd64/arm64) and pushes to ghcr.io. Build numbers are recorded via a reusable workflow from zostay/build.
