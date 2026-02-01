@@ -9,13 +9,26 @@ jobs:
     name: Build and Push to Docker Hub
     runs-on: ubuntu-latest
     environment: v4.qubling.cloud
+    outputs:
+      build-prefix: ${{ steps.branch.outputs.build-prefix }}
+      build-tag: ${{ steps.tag.outputs.build-tag }}
+      aws-region: ${{ vars.S3_BUILD_DEFAULT_REGION }}
+      aws-endpoint-url: ${{ vars.S3_BUILD_ENDPOINT_URL }}
     steps:
     - uses: docker/setup-buildx-action@v3
     - uses: actions/checkout@v5
     - name: Extract Branch Name
-      run: "echo $GITHUB_REF | awk -F/ '{{print\"BUILD_PREFIX=\"$3}}' >> $GITHUB_ENV"
+      id: branch
+      run: |
+        BUILD_PREFIX=$(echo $GITHUB_REF | awk -F/ '{print $3}')
+        echo "build-prefix=$BUILD_PREFIX" >> $GITHUB_OUTPUT
+        echo "BUILD_PREFIX=$BUILD_PREFIX" >> $GITHUB_ENV
     - name: Build Number
-      run: echo BUILD_TAG="${{ env.BUILD_PREFIX }}-${{ github.run_number }}.${{ github.run_attempt }}" >> $GITHUB_ENV
+      id: tag
+      run: |
+        BUILD_TAG="${{ env.BUILD_PREFIX }}-${{ github.run_number }}.${{ github.run_attempt }}"
+        echo "build-tag=$BUILD_TAG" >> $GITHUB_OUTPUT
+        echo "BUILD_TAG=$BUILD_TAG" >> $GITHUB_ENV
     - name: Log in to GitHub Container Registry
       run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
     - uses: docker/build-push-action@v6
@@ -24,11 +37,16 @@ jobs:
         push: true
         platforms: linux/amd64,linux/arm64
         tags: ghcr.io/${{ github.repository }}:latest,ghcr.io/${{ github.repository }}:${{ env.BUILD_TAG }}
-    - name: Update Build Number
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.S3_BUILD_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_BUILD_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ vars.S3_BUILD_DEFAULT_REGION }}
-        AWS_ENDPOINT_URL: ${{ vars.S3_BUILD_ENDPOINT_URL }}
-      run: |
-        ./set-build-number --env-name ${{ env.BUILD_PREFIX }} periodic-s3-sync ${{ env.BUILD_TAG }}
+
+  record-build:
+    name: Record Build Number
+    needs: build
+    uses: zostay/build/.github/workflows/update-build-number.yaml@master
+    with:
+      app-name: periodic-s3-sync
+      env-name: ${{ needs.build.outputs.build-prefix }}
+      aws-region: ${{ needs.build.outputs.aws-region }}
+      aws-endpoint-url: ${{ needs.build.outputs.aws-endpoint-url }}
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.S3_BUILD_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_BUILD_SECRET_ACCESS_KEY }}
