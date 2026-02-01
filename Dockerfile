@@ -10,6 +10,7 @@ RUN apk --no-cache add \
 RUN s3cmd --version
 
 ENV AWS_CA_BUNDLE="/etc/ssl/cert.pem" \
+    AWS_ENDPOINT_URL="" \
     CRON_SCHEDULE="0 * * * *" \
     SYNC_MODE="STARTUP+PERIODIC" \
     SYNC_FROM="/data" \
