@@ -12,8 +12,9 @@ jobs:
     outputs:
       build-prefix: ${{ steps.branch.outputs.build-prefix }}
       build-tag: ${{ steps.tag.outputs.build-tag }}
-      aws-region: ${{ vars.S3_BUILD_DEFAULT_REGION }}
-      aws-endpoint-url: ${{ vars.S3_BUILD_ENDPOINT_URL }}
+      aws-region: ${{ vars.AWS_DEFAULT_REGION }}
+      aws-endpoint-url: ${{ vars.AWS_ENDPOINT_URL }}
+      bucket: ${{ vars.BUILD_NUMBER_BUCKET }}
     steps:
     - uses: docker/setup-buildx-action@v3
     - uses: actions/checkout@v5
@@ -47,6 +48,7 @@ jobs:
       env-name: ${{ needs.build.outputs.build-prefix }}
       aws-region: ${{ needs.build.outputs.aws-region }}
       aws-endpoint-url: ${{ needs.build.outputs.aws-endpoint-url }}
+      bucket: ${{ needs.build.outputs.bucket }}
     secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.S3_BUILD_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_BUILD_SECRET_ACCESS_KEY }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
