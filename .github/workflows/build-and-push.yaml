@@ -2,7 +2,7 @@
 name: Build/Deploy
 on:
   push:
-    branches: [ master, prod ]
+    branches: [ master, prod, non-aws-support ]
 
 jobs:
   build:
