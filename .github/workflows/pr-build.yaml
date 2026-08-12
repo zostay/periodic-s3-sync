@@ -1,0 +1,33 @@
+---
+name: PR Build
+
+on:
+  pull_request:
+    branches: [ master ]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-build-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build Image
+    runs-on: ubuntu-latest
+    steps:
+    - uses: docker/setup-buildx-action@v4
+    - uses: actions/checkout@v7
+    # Build only, never push. The `RUN s3cmd --version` line in the Dockerfile
+    # acts as the smoke test: a base image bump that drops or renames an apk
+    # package fails here instead of on master. Single-platform to keep PR
+    # builds fast; the multi-arch build still happens on push to master.
+    - uses: docker/build-push-action@v7
+      with:
+        context: .
+        push: false
+        platforms: linux/amd64
+        tags: periodic-s3-sync:pr-${{ github.event.pull_request.number }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
